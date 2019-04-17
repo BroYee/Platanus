@@ -22,14 +22,12 @@ public class PlatformManager : MonoBehaviour {
     private float yMoveSpeed;
 
     private float gravityScale;
-
     
 
-	// Use this for initialization
 	void Start () {
     
+        // Generate the platforms which is going to appear at first
         platformList = new List<List<GameObject>>();
-
         for (int i = 0; i < platforms.Capacity; i++)
         {
             platformList.Add(new List<GameObject>());
@@ -42,7 +40,7 @@ public class PlatformManager : MonoBehaviour {
                 platformList[i].Add(temp);
             }
         }
-
+        // Widen the spaces between each platform by spaceBtnPlatforms
         for (int i = 0; i < 5; i++)
         {
             int platformIndex = RandomPlatformIndex();
@@ -62,14 +60,13 @@ public class PlatformManager : MonoBehaviour {
 
         StartCoroutine(Wind());
 	}
-
-    // Update is called once per frame
+    
     void Update()
     {
-
+        // Get position of the platform generated at the last
         Vector3 tempVec3 = Camera.main.WorldToScreenPoint(platformList[lastPlatformsXIndex][lastPlatformsYIndex].transform.position);
 
-        if (tempVec3.y <= 2000)
+        if (tempVec3.y <= 2000) // if the platform appears in the screen
         {
             int platformIndex = RandomPlatformIndex();
 
@@ -77,6 +74,7 @@ public class PlatformManager : MonoBehaviour {
             {
                 if (platformList[platformIndex][i].activeSelf == false)
                 {
+                    // Ramdomized x position and adjusted y position to spaceBtnPlatforms
                     platformList[platformIndex][i].transform.position = new Vector3(RandomPlatformXPos(), platformList[lastPlatformsXIndex][lastPlatformsYIndex].transform.position.y + spaceBtnPlatforms, 0);
                     platformList[platformIndex][i].SetActive(true);
 
@@ -88,6 +86,7 @@ public class PlatformManager : MonoBehaviour {
 
         }
 
+        // Make all platforms fall while player is not idle
         if (GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMove>().idle == false)
         {
             for (int i = 0; i < platforms.Capacity; i++)
@@ -101,14 +100,13 @@ public class PlatformManager : MonoBehaviour {
                 }
             }
         }
-
     }
 
     int RandomPlatformIndex()
     {
         int rand = Random.Range(0, 100);
         int index = 0;
-        int spawnChanceAcc = 0; 
+        int spawnChanceAcc = 0;  // Store previous spawn chance rates
 
         while (true)
         {
@@ -126,8 +124,6 @@ public class PlatformManager : MonoBehaviour {
             index++;
             spawnChanceAcc += spawnChance[index];
         }
-
-
     }
 
     float RandomPlatformXPos()
@@ -138,8 +134,6 @@ public class PlatformManager : MonoBehaviour {
     IEnumerator Wind()
     {
         yield return new WaitForSeconds(Random.Range(20.0f, 30.0f));
-
-        Debug.Log("Wind");
 
         xMoveSpeed = Random.Range(-3.0f, 3.0f);
         yMoveSpeed = Random.Range(-1.0f, 1.0f);
