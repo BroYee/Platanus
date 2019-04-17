@@ -106,10 +106,11 @@ public class PlatformManager : MonoBehaviour {
     {
         int rand = Random.Range(0, 100);
         int index = 0;
-        int spawnChanceAcc = 0;  // Store previous spawn chance rates
+        int spawnChanceAcc = 0;  // Store previous spawn chances
 
         while (true)
         {
+	    // Exception for first compution	
             if (index == 0)
             {
                 if (rand < spawnChance[0])
